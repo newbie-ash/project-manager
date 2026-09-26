@@ -2,103 +2,112 @@
 
 @section('content')
 <!-- Header & Search -->
-<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-5">
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
     <div>
-        <h1 class="text-3xl font-bold tracking-tight text-slate-900">Inventory</h1>
-        <p class="text-slate-500 mt-1.5 text-sm font-medium">Manage your product catalog and stock levels.</p>
+        <h1 class="text-4xl font-serif font-bold text-maroon-900 tracking-tight">The Collection</h1>
+        <p class="text-maroon-800/70 mt-2 font-medium tracking-wide uppercase text-xs">Curated exclusive items</p>
     </div>
     
-    <form action="{{ route('products.index') }}" method="GET" class="relative group w-full md:w-80">
-        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <form action="{{ route('products.index') }}" method="GET" class="relative group w-full md:w-96">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <svg class="h-4 w-4 text-maroon-900/40 group-focus-within:text-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
         </div>
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or category..." class="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-2xl text-sm leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm hover:shadow-md">
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search collection..." class="block w-full pl-11 pr-4 py-3.5 border-b-2 border-maroon-900/20 bg-transparent text-maroon-900 placeholder-maroon-900/40 focus:outline-none focus:border-gold transition-colors font-serif text-lg italic">
     </form>
 </div>
 
 <!-- Product Grid -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
     @forelse($products as $product)
-        <div class="group bg-white rounded-3xl border border-slate-200/60 overflow-hidden hover:shadow-xl hover:shadow-indigo-500/5 hover:border-indigo-200 transition-all duration-300 flex flex-col h-full relative">
+        <div class="group bg-white flex flex-col h-full relative shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden border border-cream-200">
             
-            <div class="p-6 flex-grow flex flex-col">
-                <div class="flex justify-between items-start mb-5">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200/60">
+            <!-- Luxury Image or Placeholder -->
+            <div class="h-56 bg-cream-100 border-b border-cream-200 relative overflow-hidden flex items-center justify-center">
+                @if($product->image)
+                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                @else
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] opacity-50"></div>
+                    <div class="w-16 h-16 rounded-full border border-gold flex items-center justify-center relative z-10 bg-white/50 backdrop-blur-sm">
+                        <span class="font-serif text-2xl text-maroon-900 italic">{{ substr($product->name, 0, 1) }}</span>
+                    </div>
+                @endif
+            </div>
+
+            <div class="p-8 flex-grow flex flex-col bg-white">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-[10px] tracking-[0.2em] uppercase text-maroon-900/60 font-bold">
                         {{ $product->category }}
                     </span>
                     @if($product->stock == 0)
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-100">
-                            Out of Stock
-                        </span>
+                        <span class="text-[10px] tracking-wider uppercase text-rose-600 font-bold">Sold Out</span>
                     @else
-                        <span class="inline-flex items-center text-xs font-medium text-slate-500 bg-white border border-slate-100 shadow-sm px-2.5 py-1 rounded-full">
-                            <svg class="w-3.5 h-3.5 mr-1.5 {{ $product->stock < 10 ? 'text-amber-500' : 'text-emerald-500' }}" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                            {{ $product->stock }} left
+                        <span class="text-[10px] tracking-wider uppercase text-gold font-bold">
+                            {{ $product->stock }} Available
                         </span>
                     @endif
                 </div>
                 
-                <h2 class="text-lg font-bold text-slate-800 leading-snug mb-1 group-hover:text-indigo-600 transition-colors line-clamp-2" title="{{ $product->name }}">
+                <h2 class="text-2xl font-serif font-bold text-maroon-900 leading-tight mb-6 group-hover:text-gold transition-colors">
                     {{ $product->name }}
                 </h2>
                 
-                <div class="mt-auto pt-6 flex items-end justify-between">
-                    <div>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-1">Price</p>
-                        <p class="text-2xl font-black text-slate-900 tracking-tight">Rp{{ number_format($product->price, 0, ',', '.') }}</p>
-                    </div>
+                <div class="mt-auto pt-6 border-t border-maroon-900/10 flex items-center justify-between">
+                    <p class="text-xl font-serif italic text-maroon-900">
+                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                    </p>
                 </div>
             </div>
             
-            <div class="px-5 py-4 bg-slate-50/50 border-t border-slate-100 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 focus-within:opacity-100">
-                <a href="{{ route('products.edit', $product->id) }}" class="inline-flex items-center justify-center p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500" title="Edit Product">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            @if(auth()->user()->role === 'admin')
+            <div class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <a href="{{ route('products.edit', $product->id) }}" class="w-8 h-8 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-maroon-900 hover:text-gold hover:bg-maroon-900 shadow-lg transition-all" title="Edit">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                 </a>
-                <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Delete this product permanently?');">
+                <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Remove this piece from the collection?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="inline-flex items-center justify-center p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 transition-all focus:outline-none focus:ring-2 focus:ring-rose-500" title="Delete Product">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <button type="submit" class="w-8 h-8 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-maroon-900 hover:text-white hover:bg-rose-800 shadow-lg transition-all" title="Delete">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
                 </form>
             </div>
-            <!-- Focus outline helper for accessibility -->
-            <div class="absolute inset-0 border-2 border-transparent group-focus-within:border-indigo-500 rounded-3xl pointer-events-none"></div>
+            @endif
         </div>
     @empty
         <!-- Empty State -->
-        <div class="col-span-full bg-white rounded-[2rem] border border-slate-200/60 p-12 text-center shadow-sm">
-            <div class="mx-auto w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6 ring-8 ring-slate-50/50">
-                <svg class="w-12 h-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+        <div class="col-span-full bg-white border border-maroon-900/10 p-16 text-center shadow-sm">
+            <div class="mx-auto w-20 h-20 border border-gold rounded-full flex items-center justify-center mb-6">
+                <svg class="w-8 h-8 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2 tracking-tight">No products found</h3>
-            <p class="text-slate-500 mb-8 max-w-md mx-auto text-sm leading-relaxed">
+            <h3 class="text-2xl font-serif font-bold text-maroon-900 mb-2">Collection Empty</h3>
+            <p class="text-maroon-900/60 mb-8 max-w-md mx-auto font-serif italic">
                 @if(request('search'))
-                    We couldn't find anything matching "<span class="font-medium text-slate-800">{{ request('search') }}</span>". Try adjusting your search term.
+                    No pieces match your search criteria.
                 @else
-                    Your inventory is completely empty. Start by adding your first product to the catalog.
+                    The boutique currently holds no items.
                 @endif
             </p>
             @if(request('search'))
-                <a href="{{ route('products.index') }}" class="inline-flex items-center justify-center px-6 py-2.5 border border-slate-300 shadow-sm text-sm font-medium rounded-full text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                <a href="{{ route('products.index') }}" class="inline-block px-8 py-3 border border-maroon-900 text-sm tracking-widest uppercase font-medium text-maroon-900 hover:bg-maroon-900 hover:text-gold transition-colors">
                     Clear Search
                 </a>
             @else
-                <a href="{{ route('products.create') }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent shadow-sm text-sm font-semibold rounded-full text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-all">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-                    Add Your First Product
+                @if(auth()->user()->role === 'admin')
+                <a href="{{ route('products.create') }}" class="inline-block px-8 py-3 bg-maroon-900 text-gold text-sm tracking-widest uppercase font-medium hover:bg-maroon-800 transition-colors">
+                    Add First Piece
                 </a>
+                @endif
             @endif
         </div>
     @endforelse
 </div>
 
 <!-- Pagination -->
-<div class="mt-12">
+<div class="mt-12 font-serif">
     {{ $products->links() }}
 </div>
 @endsection

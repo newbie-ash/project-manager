@@ -3,13 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Manager</title>
+    <title>Luxury Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        maroon: {
+                            50: '#fdf3f4',
+                            100: '#fbe4e7',
+                            200: '#f5c6cb',
+                            800: '#6d1020',
+                            900: '#4a0b16',
+                        },
+                        cream: {
+                            DEFAULT: '#f9f6f0',
+                            100: '#fffdf8',
+                            200: '#f3ead8',
+                        },
+                        gold: {
+                            DEFAULT: '#d4af37',
+                            hover: '#b5952f',
+                            light: '#f3e5ab'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
         .animate-fade-in-down {
             animation: fadeInDown 0.4s ease-out;
         }
@@ -19,43 +51,128 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+<body class="bg-cream text-slate-800 antialiased selection:bg-gold-light selection:text-maroon-900">
     
-    <nav class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200/80 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center gap-3">
-                    <div class="bg-gradient-to-br from-indigo-500 to-violet-600 text-white p-2 rounded-xl shadow-inner shadow-white/20">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar (Desktop) -->
+        <aside class="w-72 bg-maroon-900 text-white flex-col hidden md:flex border-r border-maroon-800 shadow-2xl z-20">
+            <!-- Brand -->
+            <div class="h-24 flex items-center justify-center border-b border-maroon-800/50">
+                <a href="{{ route('products.index') }}" class="flex flex-col items-center">
+                    <span class="font-serif text-3xl text-gold font-bold italic tracking-wider">L'Aura</span>
+                    <span class="text-[10px] tracking-[0.3em] uppercase text-cream/70 mt-1">Maison de Luxe</span>
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="flex-1 px-5 py-8 space-y-3">
+                <p class="px-4 text-xs font-semibold text-maroon-200/50 uppercase tracking-widest mb-4">Menu</p>
+                <a href="{{ route('products.index') }}" class="flex items-center px-4 py-3 bg-maroon-800/60 rounded-xl text-gold font-medium border border-maroon-800 hover:bg-maroon-800 transition-colors shadow-inner">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Collection
+                </a>
+                
+                @auth
+                    @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('products.create') }}" class="flex items-center px-4 py-3 text-cream/70 hover:text-gold hover:bg-maroon-800/40 rounded-xl font-medium transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"></path></svg>
+                        Add New Piece
+                    </a>
+                    @endif
+                @endauth
+            </nav>
+
+            <!-- User Area -->
+            <div class="p-6 border-t border-maroon-800/50 bg-maroon-900">
+                @auth
+                <div class="flex items-center gap-4 mb-5">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-yellow-600 flex items-center justify-center text-maroon-900 font-bold font-serif shadow-lg">
+                        {{ substr(auth()->user()->name, 0, 1) }}
                     </div>
-                    <a href="{{ route('products.index') }}" class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-900 to-slate-800">
-                        ProManage
-                    </a>
+                    <div>
+                        <p class="text-sm font-semibold text-cream">{{ auth()->user()->name }}</p>
+                        <p class="text-[11px] text-gold uppercase tracking-wider font-medium">{{ auth()->user()->role }}</p>
+                    </div>
                 </div>
-                <!-- Action -->
-                <div class="flex items-center">
-                    <a href="{{ route('products.create') }}" class="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-medium text-white shadow hover:bg-slate-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 transition-all duration-200">
-                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-                        New Product
-                    </a>
-                </div>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-maroon-200 hover:text-white border border-maroon-800 hover:bg-maroon-800 rounded-lg transition-all">
+                        Sign Out
+                    </button>
+                </form>
+                @endauth
             </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 flex flex-col min-w-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]">
+            
+            <!-- Mobile Header -->
+            <header class="bg-maroon-900 border-b border-maroon-800 px-6 py-4 flex items-center justify-between md:hidden shadow-md z-10">
+                <span class="font-serif text-2xl text-gold font-bold italic">L'Aura</span>
+                @auth
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="text-xs text-cream uppercase tracking-wider">Logout</button>
+                </form>
+                @endauth
+            </header>
+
+            <!-- Main Scrollable Area -->
+            <main class="flex-1 overflow-y-auto p-6 sm:p-12">
+                <div class="max-w-6xl mx-auto">
+                    @if(session('success'))
+                        <!-- Floating Popup Toast Success -->
+                        <div id="toast-success-app" class="fixed top-8 right-8 z-50 bg-white border border-cream-200 border-l-4 border-l-gold shadow-2xl p-5 min-w-[300px] transform transition-all duration-500 ease-out translate-y-0 opacity-100">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-cream-100 flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                    <span class="font-serif italic text-maroon-900 font-medium">{{ session('success') }}</span>
+                                </div>
+                                <button onclick="closeAppToast('toast-success-app')" class="text-maroon-900/40 hover:text-maroon-900 transition-colors ml-4 focus:outline-none">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <!-- Floating Popup Toast Error -->
+                        <div id="toast-error-app" class="fixed top-8 right-8 z-50 bg-white border border-cream-200 border-l-4 border-l-rose-600 shadow-2xl p-5 min-w-[300px] transform transition-all duration-500 ease-out translate-y-0 opacity-100">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-rose-50 flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                    </div>
+                                    <span class="font-serif italic text-maroon-900 font-medium">{{ session('error') }}</span>
+                                </div>
+                                <button onclick="closeAppToast('toast-error-app')" class="text-maroon-900/40 hover:text-maroon-900 transition-colors ml-4 focus:outline-none">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+                    <script>
+                        function closeAppToast(id) {
+                            const toast = document.getElementById(id);
+                            if (toast) {
+                                toast.classList.remove('translate-y-0', 'opacity-100');
+                                toast.classList.add('-translate-y-4', 'opacity-0');
+                                setTimeout(() => toast.remove(), 500);
+                            }
+                        }
+                        setTimeout(() => closeAppToast('toast-success-app'), 4000);
+                        setTimeout(() => closeAppToast('toast-error-app'), 5000);
+                    </script>
+
+                    @yield('content')
+                </div>
+            </main>
         </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        @if(session('success'))
-            <div class="mb-8 flex items-center gap-3 bg-teal-50/80 backdrop-blur-sm border border-teal-200/60 text-teal-800 px-5 py-4 rounded-2xl shadow-sm animate-fade-in-down">
-                <div class="bg-teal-100 rounded-full p-1">
-                    <svg class="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                </div>
-                <span class="font-medium text-sm">{{ session('success') }}</span>
-            </div>
-        @endif
-
-        @yield('content')
-    </main>
+        
+    </div>
 
 </body>
 </html>

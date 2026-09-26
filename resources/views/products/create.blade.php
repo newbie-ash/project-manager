@@ -1,76 +1,87 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
+<div class="max-w-3xl mx-auto">
     <!-- Header -->
-    <div class="mb-8 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <a href="{{ route('products.index') }}" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            </a>
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">Add Product</h1>
-                <p class="text-sm text-slate-500 font-medium">Create a new item in your inventory</p>
-            </div>
-        </div>
+    <div class="mb-10 text-center">
+        <h1 class="text-4xl font-serif font-bold tracking-tight text-maroon-900 mb-3">Add New Piece</h1>
+        <div class="w-16 h-0.5 bg-gold mx-auto"></div>
     </div>
 
-    <!-- Form Card -->
-    <div class="bg-white rounded-[2rem] border border-slate-200/60 shadow-sm overflow-hidden">
-        <form action="{{ route('products.store') }}" method="POST" class="p-6 sm:p-10">
+    <!-- Form -->
+    <div class="bg-white rounded-2xl shadow-xl border border-cream-200 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] opacity-20 pointer-events-none"></div>
+        
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="p-8 sm:p-12 relative z-10">
             @csrf
             
-            <div class="space-y-6">
+            <div class="space-y-8">
+                <!-- Image Upload -->
+                <div>
+                    <label class="block text-xs font-bold text-maroon-900/60 uppercase tracking-widest mb-4">Piece Image</label>
+                    <div class="border-2 border-dashed border-maroon-900/20 rounded-2xl p-8 text-center hover:border-gold transition-colors bg-cream-100/50">
+                        <svg class="mx-auto h-12 w-12 text-maroon-900/40 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="flex flex-col sm:flex-row text-sm text-maroon-900 justify-center items-center gap-2">
+                            <label for="image" class="relative cursor-pointer bg-white rounded-lg font-medium text-gold hover:text-gold-hover focus-within:outline-none px-3 py-1 shadow-sm border border-cream-200">
+                                <span>Upload a file</span>
+                                <input id="image" name="image" type="file" class="sr-only" accept="image/jpeg, image/png, image/jpg">
+                            </label>
+                            <p class="pl-1 font-serif italic text-maroon-900/60">or drag and drop</p>
+                        </div>
+                        <p class="text-xs text-maroon-900/50 mt-3 font-serif">PNG, JPG, JPEG up to 2MB</p>
+                    </div>
+                    @error('image')
+                        <p class="text-rose-600 text-xs font-medium mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Name -->
                 <div>
-                    <label for="name" class="block text-sm font-semibold text-slate-700 mb-1.5">Product Name</label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}" class="block w-full px-4 py-3 border @error('name') border-rose-300 focus:border-rose-500 focus:ring-rose-500/20 @else border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 @enderror rounded-xl text-sm transition-colors focus:outline-none focus:ring-4 bg-slate-50/50 focus:bg-white" placeholder="e.g. Mechanical Keyboard">
+                    <label for="name" class="block text-xs font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Item Name</label>
+                    <input type="text" name="name" id="name" value="{{ old('name') }}" class="block w-full px-4 py-3 rounded-xl border @error('name') border-rose-500 @else border-maroon-900/20 focus:border-gold focus:ring-1 focus:ring-gold @enderror bg-white text-base font-sans text-maroon-900 focus:outline-none shadow-sm transition-all" placeholder="e.g. Classic Signature Tote">
                     @error('name')
-                        <p class="text-rose-500 text-xs font-medium mt-2 flex items-center"><svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> {{ $message }}</p>
+                        <p class="text-rose-600 text-xs font-medium mt-2">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Category -->
                 <div>
-                    <label for="category" class="block text-sm font-semibold text-slate-700 mb-1.5">Category</label>
-                    <input type="text" name="category" id="category" value="{{ old('category') }}" class="block w-full px-4 py-3 border @error('category') border-rose-300 focus:border-rose-500 focus:ring-rose-500/20 @else border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 @enderror rounded-xl text-sm transition-colors focus:outline-none focus:ring-4 bg-slate-50/50 focus:bg-white" placeholder="e.g. Electronics">
+                    <label for="category" class="block text-xs font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Category</label>
+                    <input type="text" name="category" id="category" value="{{ old('category') }}" class="block w-full px-4 py-3 rounded-xl border @error('category') border-rose-500 @else border-maroon-900/20 focus:border-gold focus:ring-1 focus:ring-gold @enderror bg-white text-base font-sans text-maroon-900 focus:outline-none shadow-sm transition-all" placeholder="e.g. Handbags">
                     @error('category')
-                        <p class="text-rose-500 text-xs font-medium mt-2 flex items-center"><svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> {{ $message }}</p>
+                        <p class="text-rose-600 text-xs font-medium mt-2">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Price & Stock Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
                     <div>
-                        <label for="price" class="block text-sm font-semibold text-slate-700 mb-1.5">Price (Rp)</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <span class="text-slate-400 font-medium sm:text-sm">Rp</span>
-                            </div>
-                            <input type="number" step="0.01" min="0" name="price" id="price" value="{{ old('price') }}" class="block w-full pl-11 pr-4 py-3 border @error('price') border-rose-300 focus:border-rose-500 focus:ring-rose-500/20 @else border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 @enderror rounded-xl text-sm transition-colors focus:outline-none focus:ring-4 bg-slate-50/50 focus:bg-white" placeholder="0">
-                        </div>
+                        <label for="price" class="block text-xs font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Price (IDR)</label>
+                        <input type="number" step="0.01" min="0" name="price" id="price" value="{{ old('price') }}" class="block w-full px-4 py-3 rounded-xl border @error('price') border-rose-500 @else border-maroon-900/20 focus:border-gold focus:ring-1 focus:ring-gold @enderror bg-white text-base font-sans text-maroon-900 focus:outline-none shadow-sm transition-all" placeholder="0">
                         @error('price')
-                            <p class="text-rose-500 text-xs font-medium mt-2 flex items-center"><svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> {{ $message }}</p>
+                            <p class="text-rose-600 text-xs font-medium mt-2">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label for="stock" class="block text-sm font-semibold text-slate-700 mb-1.5">Stock Available</label>
-                        <input type="number" min="0" name="stock" id="stock" value="{{ old('stock', 0) }}" class="block w-full px-4 py-3 border @error('stock') border-rose-300 focus:border-rose-500 focus:ring-rose-500/20 @else border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 @enderror rounded-xl text-sm transition-colors focus:outline-none focus:ring-4 bg-slate-50/50 focus:bg-white">
+                        <label for="stock" class="block text-xs font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Available Quantity</label>
+                        <input type="number" min="0" name="stock" id="stock" value="{{ old('stock', 0) }}" class="block w-full px-4 py-3 rounded-xl border @error('stock') border-rose-500 @else border-maroon-900/20 focus:border-gold focus:ring-1 focus:ring-gold @enderror bg-white text-base font-sans text-maroon-900 focus:outline-none shadow-sm transition-all">
                         @error('stock')
-                            <p class="text-rose-500 text-xs font-medium mt-2 flex items-center"><svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> {{ $message }}</p>
+                            <p class="text-rose-600 text-xs font-medium mt-2">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
             </div>
 
             <!-- Footer Actions -->
-            <div class="mt-10 pt-6 border-t border-slate-100 flex items-center justify-end gap-3">
-                <a href="{{ route('products.index') }}" class="px-5 py-2.5 rounded-full text-sm font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 transition-colors">
+            <div class="mt-12 pt-8 border-t border-maroon-900/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="{{ route('products.index') }}" class="w-full sm:w-auto text-center px-8 py-3 text-sm tracking-widest uppercase font-medium text-maroon-900 hover:text-gold transition-colors rounded-xl">
                     Cancel
                 </a>
-                <button type="submit" class="px-6 py-2.5 rounded-full text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 transition-all">
-                    Create Product
+                <button type="submit" class="w-full sm:w-auto px-10 py-3 rounded-xl text-sm tracking-widest uppercase font-medium text-maroon-900 bg-gold hover:bg-gold-hover hover:text-white shadow-md transition-colors">
+                    Save Piece
                 </button>
             </div>
         </form>
