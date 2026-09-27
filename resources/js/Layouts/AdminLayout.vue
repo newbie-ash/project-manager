@@ -20,9 +20,9 @@ const page = usePage();
                     <Link :href="route('products.index')" class="text-[11px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': $page.url.startsWith('/products'), 'text-maroon-900/50 hover:text-maroon-900': !$page.url.startsWith('/products')}">
                         Collection
                     </Link>
-                    <a href="#" class="text-[11px] font-bold tracking-widest uppercase text-maroon-900/50 hover:text-maroon-900 transition-colors">
+                    <Link :href="route('orders.index')" class="text-[11px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': $page.url.startsWith('/orders'), 'text-maroon-900/50 hover:text-maroon-900': !$page.url.startsWith('/orders')}">
                         Orders
-                    </a>
+                    </Link>
                 </nav>
 
                 <!-- Center: Logo -->

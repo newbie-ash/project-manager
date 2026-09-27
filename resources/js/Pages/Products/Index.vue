@@ -16,9 +16,8 @@ defineProps({
             <!-- Page Header (Minimalist) -->
             <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6 border-b border-maroon-900/10 pb-6">
                 <div>
-                    <h1 class="text-2xl font-bold tracking-[0.2em] uppercase text-maroon-900 flex items-center gap-4">
+                    <h1 class="text-2xl font-bold tracking-[0.2em] uppercase text-maroon-900">
                         The Collection
-                        <div class="w-12 h-0.5 bg-maroon-900 hidden md:block"></div>
                     </h1>
                     <p class="text-xs font-serif italic text-maroon-900/60 mt-2">Latest additions to the Maison</p>
                 </div>
