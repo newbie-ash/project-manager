@@ -1,10 +1,10 @@
-# A'ritza - Maison de Luxe 💎
+# A'ritza - Maison de Luxe 
 
 A'ritza adalah aplikasi *e-commerce* premium bergaya *luxury fashion boutique* (terinspirasi dari Chanel, Balenciaga, dan H&M). Proyek ini dibangun sebagai **Tugas Mini Project Pemrograman Web (Durasi 1 Minggu)**.
 
 Platform ini mendemonstrasikan integrasi penuh antara **VILT Stack** (Vue, Inertia, Laravel, Tailwind CSS) dengan implementasi sistem *Role-Based Access Control* (RBAC), arsitektur *Monolith* Modern, dan interaktivitas tingkat lanjut yang dibalut dalam *User Interface* kelas atas.
 
-## 🌟 Fitur Utama
+##  Fitur Utama
 
 - **VILT Stack Modern:** Memisahkan *backend* (Laravel) dan *frontend* (Vue 3) menjadi SPA (*Single Page Application*) reaktif tanpa perlu mengonfigurasi REST API secara manual berkat **Inertia.js**.
 - **Role-Based Access Control (RBAC):** Membedakan dua perjalanan pengguna (*User Journey*):
@@ -18,8 +18,9 @@ Platform ini mendemonstrasikan integrasi penuh antara **VILT Stack** (Vue, Inert
 - **Order Management & Customer Support:** Admin dapat memperbarui status pesanan secara *real-time* (*Processing -> Shipped -> Delivered*) serta mengelola tiket komplain pelanggan.
 - **Keamanan (Web Security):** Terproteksi secara *default* dari celah SQL Injection (PDO Eloquent), XSS (Vue *escaping*), dan CSRF (Native Laravel Tokens).
 
-## 🛠️ Teknologi yang Digunakan
+##  Teknologi yang Digunakan
 
+- **AI Agent:** Antigravity & Gemini Pro
 - **Backend:** Laravel 11.x
 - **Frontend:** Vue 3 (Composition API)
 - **Routing:** Inertia.js (untuk Vue) & Ziggy (untuk *route helpers*)
@@ -28,7 +29,7 @@ Platform ini mendemonstrasikan integrasi penuh antara **VILT Stack** (Vue, Inert
 - **Bundler:** Vite
 - **Database:** SQLite / MySQL
 
-## 🚀 Panduan Instalasi (Setup Guide)
+##  Panduan Instalasi (Setup Guide)
 
 Ikuti langkah-langkah berikut untuk menjalankan proyek ini di mesin lokal Anda:
 
@@ -81,13 +82,13 @@ Buka `http://127.0.0.1:8000` di *browser* Anda untuk menikmati etalase A'ritza!
 
 ---
 
-## 📁 Dokumentasi Arsitektur Lengkap
+##  Dokumentasi Arsitektur Lengkap
 Untuk melihat pemodelan teknis proyek ini (Flowchart, ERD, dan struktur diagram MVC), silakan lihat dokumen Blueprint di folder `docs/`:
 - [Product Requirements Document (PRD)](./docs/PRD.md)
 - [System Architecture Document (SAD)](./docs/SAD.md)
 - [System Flowchart & User Journey](./docs/FLOWCHART.md)
 
-## 🎨 Konvensi Desain
+##  Konvensi Desain
 - **Maroon-900** (`#611624`): Warna utama/dominan untuk memberikan kesan mahal, elegan, dan tegas.
 - **Cream-50** (`#fdfbf7`): Latar belakang utama pengganti warna putih murni agar lebih ramah di mata (hangat).
 - **Gold** (`#c8a97e`): Warna aksen untuk sorotan penting (Status pemesanan, *hover* interaktif, dsb).
