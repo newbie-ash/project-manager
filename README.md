@@ -20,7 +20,7 @@ Platform ini mendemonstrasikan integrasi penuh antara **VILT Stack** (Vue, Inert
 
 ##  Teknologi yang Digunakan
 
-- **AI Agent:** Antigravity & Gemini Pro
+- **AI Agent:** Antigravity & Gemini Pro (Vibe coding tapi paham)
 - **Backend:** Laravel 11.x
 - **Frontend:** Vue 3 (Composition API)
 - **Routing:** Inertia.js (untuk Vue) & Ziggy (untuk *route helpers*)
