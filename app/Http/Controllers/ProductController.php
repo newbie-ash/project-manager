@@ -16,19 +16,25 @@ class ProductController extends Controller
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->get('search');
             $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('category', 'like', "%{$search}%");
+                $q->where('name', 'like', "%{$search}%");
             });
         }
 
-        $products = $query->paginate(9)->withQueryString();
+        if ($request->has('category') && !empty($request->category)) {
+            $query->where('category', $request->category);
+        }
 
-        return view('products.index', compact('products'));
+        $products = $query->paginate(12)->withQueryString();
+
+        return \Inertia\Inertia::render('Products/Index', [
+            'products' => $products,
+            'filters' => $request->only(['search', 'category'])
+        ]);
     }
 
     public function create()
     {
-        return view('products.create');
+        return \Inertia\Inertia::render('Products/Create');
     }
 
     public function store(ProductRequest $request)
@@ -52,7 +58,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        return view('products.edit', compact('product'));
+        return \Inertia\Inertia::render('Products/Edit', ['product' => $product]);
     }
 
     public function update(ProductRequest $request, Product $product)

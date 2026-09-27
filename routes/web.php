@@ -15,6 +15,7 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     // HANYA admin yang bisa menambah, mengubah, dan menghapus produk
     Route::middleware(['role:admin'])->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
         Route::resource('products', ProductController::class)->except(['index', 'show']);
     });
 

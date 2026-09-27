@@ -27,13 +27,21 @@ class ProductRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'min:3',
+                'min:4', // Tidak boleh terdiri dari 3 huruf (minimal 4)
                 Rule::unique('products')->ignore($productId),
             ],
             'category' => 'required',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric|gt:0', // Tidak boleh 0 atau di bawahnya
             'stock' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.min' => 'The item name must be more than 3 characters.',
+            'price.gt' => 'The price must be greater than 0.',
         ];
     }
 }
