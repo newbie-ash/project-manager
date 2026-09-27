@@ -77,11 +77,11 @@ const submit = () => {
                 <form @submit.prevent="submit" class="space-y-8">
                     <div>
                         <label class="block text-[10px] font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Email Identity</label>
-                        <input v-model="form.email" type="email" required class="w-full px-5 py-4 rounded-2xl bg-cream-50 border-2 border-maroon-900/30 hover:border-maroon-900/50 focus:border-gold focus:ring-2 focus:ring-gold/30 focus:outline-none transition-all text-maroon-900 font-medium text-base shadow-inner placeholder-maroon-900/30" placeholder="">
+                        <input v-model="form.email" type="email" required class="w-full px-5 py-4 rounded-2xl bg-cream-100 border-2 border-maroon-900/30 hover:border-maroon-900/50 focus:border-gold focus:ring-2 focus:ring-gold/30 focus:outline-none transition-all text-maroon-900 font-medium text-base shadow-inner placeholder-maroon-900/30" placeholder="">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Passphrase</label>
-                        <input v-model="form.password" type="password" required class="w-full px-5 py-4 rounded-2xl bg-cream-50 border-2 border-maroon-900/30 hover:border-maroon-900/50 focus:border-gold focus:ring-2 focus:ring-gold/30 focus:outline-none transition-all text-maroon-900 font-medium text-base shadow-inner placeholder-maroon-900/30" placeholder="">
+                        <input v-model="form.password" type="password" required class="w-full px-5 py-4 rounded-2xl bg-cream-100 border-2 border-maroon-900/30 hover:border-maroon-900/50 focus:border-gold focus:ring-2 focus:ring-gold/30 focus:outline-none transition-all text-maroon-900 font-medium text-base shadow-inner placeholder-maroon-900/30" placeholder="">
                     </div>
                     
                     <button type="submit" :disabled="form.processing" class="w-full bg-maroon-900 text-gold text-xs tracking-[0.2em] uppercase font-bold py-4 rounded-2xl hover:bg-maroon-800 transition-colors mt-4 shadow-lg hover:shadow-xl disabled:opacity-50">

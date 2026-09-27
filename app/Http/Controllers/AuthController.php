@@ -19,10 +19,27 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('products')->with('success', 'Berhasil login sebagai ' . Auth::user()->role);
+        $throttleKey = mb_strtolower($request->input('email')) . '|' . $request->ip();
+
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
+            return back()->withErrors([
+                'email' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $seconds . ' detik.',
+            ]);
         }
+
+        if (Auth::attempt($credentials)) {
+            \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
+            $request->session()->regenerate();
+            
+            if (Auth::user()->role === 'admin') {
+                return redirect()->intended('dashboard')->with('success', 'Welcome back, Administrator.');
+            }
+            
+            return redirect()->intended('products')->with('success', 'Berhasil login. Selamat datang di A\'ritza.');
+        }
+
+        \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
 
         return back()->withErrors([
             'email' => 'Email atau password salah.',
@@ -34,6 +51,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login')->with('success', 'Berhasil logout.');
+        return redirect('/')->with('success', 'Berhasil logout.');
     }
 }

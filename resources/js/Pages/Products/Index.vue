@@ -25,17 +25,9 @@ defineProps({
                 <div class="flex items-center gap-6">
                     <!-- Filters -->
                     <div class="flex gap-4">
-                        <Link :href="route('products.index')" class="text-[10px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': !filters.category, 'text-maroon-900/40 hover:text-maroon-900': filters.category}">All</Link>
-                        <Link :href="route('products.index', {category: 'Handbags'})" class="text-[10px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': filters.category === 'Handbags', 'text-maroon-900/40 hover:text-maroon-900': filters.category !== 'Handbags'}">Handbags</Link>
-                        <Link :href="route('products.index', {category: 'Accessories'})" class="text-[10px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': filters.category === 'Accessories', 'text-maroon-900/40 hover:text-maroon-900': filters.category !== 'Accessories'}">Accessories</Link>
-                    </div>
-
-                    <!-- Add Button for Admin -->
-                    <div v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'" class="pl-6 border-l border-maroon-900/20">
-                        <Link :href="route('products.create')" class="text-[10px] font-bold tracking-widest uppercase text-white bg-maroon-900 hover:bg-gold px-5 py-2.5 transition-colors flex items-center gap-2">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            Add Piece
-                        </Link>
+                        <Link :href="route('products.index', {search: filters?.search})" class="text-[10px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': !filters?.category, 'text-maroon-900/40 hover:text-maroon-900': filters?.category}">All</Link>
+                        <Link :href="route('products.index', {category: 'Handbags', search: filters?.search})" class="text-[10px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': filters?.category === 'Handbags', 'text-maroon-900/40 hover:text-maroon-900': filters?.category !== 'Handbags'}">Handbags</Link>
+                        <Link :href="route('products.index', {category: 'Accessories', search: filters?.search})" class="text-[10px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': filters?.category === 'Accessories', 'text-maroon-900/40 hover:text-maroon-900': filters?.category !== 'Accessories'}">Accessories</Link>
                     </div>
                 </div>
             </div>
@@ -53,13 +45,15 @@ defineProps({
                             <span class="font-serif text-4xl text-maroon-900/20 italic">{{ product.name.charAt(0) }}</span>
                         </template>
 
-                        <!-- Invisible CRUD Actions (Appear on Hover) -->
-                        <div v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'" class="absolute top-4 right-4 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <Link :href="route('products.edit', product.id)" class="w-8 h-8 bg-white/90 backdrop-blur-sm shadow flex items-center justify-center text-maroon-900 hover:text-gold transition-colors" title="Edit">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        <!-- Pre-Order Overlay for Buyers and Guests (Appear on Hover) -->
+                        <div v-if="!$page.props.auth.user || $page.props.auth.user.role !== 'admin'" class="absolute inset-0 bg-white/50 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <!-- Jika Logged in -> POST ke orders -->
+                            <Link v-if="$page.props.auth.user" :href="route('orders.store')" method="post" :data="{ product_id: product.id }" as="button" class="bg-maroon-900 text-white text-[10px] font-bold tracking-widest uppercase px-6 py-3 hover:bg-gold transition-colors shadow-xl">
+                                Pre-Order
                             </Link>
-                            <Link :href="route('products.destroy', product.id)" method="delete" as="button" class="w-8 h-8 bg-white/90 backdrop-blur-sm shadow flex items-center justify-center text-maroon-900 hover:text-rose-600 transition-colors" title="Delete">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            <!-- Jika Guest -> Redirect ke Login -->
+                            <Link v-else :href="route('login')" class="bg-maroon-900 text-white text-[10px] font-bold tracking-widest uppercase px-6 py-3 hover:bg-gold transition-colors shadow-xl inline-block">
+                                Pre-Order
                             </Link>
                         </div>
                     </div>

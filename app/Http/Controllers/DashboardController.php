@@ -10,16 +10,24 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Mock data for the dashboard since we only have Products model fully implemented
         $totalProducts = Product::count();
+        $totalOrders = \App\Models\Order::count();
         
         return Inertia::render('Admin/Dashboard', [
             'stats' => [
                 'customers' => 24, // Mock
                 'products' => $totalProducts,
                 'new_orders' => 5, // Mock
-                'transactions' => 128, // Mock
+                'transactions' => $totalOrders, 
             ]
+        ]);
+    }
+
+    public function products()
+    {
+        $products = Product::latest()->get();
+        return Inertia::render('Admin/Products', [
+            'products' => $products
         ]);
     }
 }

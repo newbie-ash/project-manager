@@ -1,5 +1,5 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import BackofficeLayout from '@/Layouts/BackofficeLayout.vue';
 import { useForm, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -39,7 +39,7 @@ const submitForm = () => {
 </script>
 
 <template>
-    <AdminLayout>
+    <BackofficeLayout>
         <div class="max-w-3xl mx-auto py-12">
             <div class="mb-10 text-center">
                 <h1 class="text-3xl font-serif font-bold tracking-tight text-maroon-900 mb-3">Edit Piece</h1>
@@ -112,5 +112,5 @@ const submitForm = () => {
                 </form>
             </div>
         </div>
-    </AdminLayout>
+    </BackofficeLayout>
 </template>

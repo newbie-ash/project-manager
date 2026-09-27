@@ -1,39 +1,93 @@
-# Product Manager (Laravel Version)
+# A'ritza - Maison de Luxe 💎
 
-Aplikasi manajemen produk berbasis web menggunakan arsitektur MVC pada framework Laravel. Aplikasi ini dibuat sebagai pemenuhan spesifikasi tugas (diadaptasi dari PHP Native) yang mendemonstrasikan pemahaman tentang operasi CRUD, keamanan (Security), dan UI/UX yang responsif.
+A'ritza adalah aplikasi *e-commerce* premium bergaya *luxury fashion boutique* (terinspirasi dari Chanel, Balenciaga, dan H&M). Proyek ini dibangun sebagai **Tugas Mini Project Pemrograman Web (Durasi 1 Minggu)**.
 
-## Fitur
-1. **Create:** Menambah produk baru dengan validasi ketat.
-2. **Read:** Menampilkan daftar produk menggunakan Card UI yang responsif.
-3. **Update:** Mengubah data produk yang ada.
-4. **Delete:** Menghapus data produk dengan aman menggunakan POST/DELETE method & CSRF token.
-5. **Bonus:** Pencarian/Filter dengan GET, serta Pagination.
+Platform ini mendemonstrasikan integrasi penuh antara **VILT Stack** (Vue, Inertia, Laravel, Tailwind CSS) dengan implementasi sistem *Role-Based Access Control* (RBAC), arsitektur *Monolith* Modern, dan interaktivitas tingkat lanjut yang dibalut dalam *User Interface* kelas atas.
 
-## Persyaratan
-- PHP >= 8.2
-- Composer
-- (Database secara otomatis menggunakan SQLite bawaan Laravel)
+## 🌟 Fitur Utama
 
-## Cara Menjalankan
-1. Buka terminal di dalam folder proyek ini.
-2. (Opsional jika proyek baru di-clone) Jalankan `composer install`
-3. (Opsional jika `.env` belum ada) Salin `.env.example` ke `.env` lalu jalankan `php artisan key:generate`
-4. Pastikan database SQLite siap dengan menjalankan: `php artisan migrate`
-5. Jalankan local server: `php artisan serve`
-6. Akses aplikasi di browser melalui URL: `http://localhost:8000`
+- **VILT Stack Modern:** Memisahkan *backend* (Laravel) dan *frontend* (Vue 3) menjadi SPA (*Single Page Application*) reaktif tanpa perlu mengonfigurasi REST API secara manual berkat **Inertia.js**.
+- **Role-Based Access Control (RBAC):** Membedakan dua perjalanan pengguna (*User Journey*):
+  - `Admin`: Memiliki akses ke Backoffice (Dashboard, CRUD Inventaris, pemrosesan Pesanan, dan penyelesaian Komplain).
+  - `Guest/Buyer`: Dapat menelusuri Katalog Publik, mencari produk, dan melakukan Pre-Order produk (yang membutuhkan Autentikasi).
+- **Luxury UI/UX & Layout Separation:** Menggunakan palet eksklusif (Maroon, Cream, Gold) dengan pemisahan *layout* secara struktural:
+  - `AdminLayout`: *Top-navbar* minimalis (digunakan untuk halaman etalase/publik).
+  - `BackofficeLayout`: *Left-sidebar* profesional (digunakan khusus untuk Dasbor Admin).
+- **Interactive Dashboard (Real-Time Charts):** Dasbor terintegrasi dengan pustaka `Chart.js` dan `vue-chartjs` untuk merender metrik *Revenue Analytics* (Bar Chart) dan *Sales by Category* (Doughnut Chart).
+- **Search & Filter Terintegrasi:** Katalog produk dilengkapi kolom pencarian interaktif dan filter kategori (Handbags, Accessories, dll) yang parameternya saling terhubung via SSR (*Server-Side* Laravel).
+- **Order Management & Customer Support:** Admin dapat memperbarui status pesanan secara *real-time* (*Processing -> Shipped -> Delivered*) serta mengelola tiket komplain pelanggan.
+- **Keamanan (Web Security):** Terproteksi secara *default* dari celah SQL Injection (PDO Eloquent), XSS (Vue *escaping*), dan CSRF (Native Laravel Tokens).
 
-## Refleksi Keamanan
-Terkait pertanyaan "*Di bagian mana aplikasi paling rentan: input, query, output, atau alur request? Jelaskan kontrol keamanan yang telah Anda implementasikan.*", berikut adalah jawabannya:
+## 🛠️ Teknologi yang Digunakan
 
-1. **Input (Rentan terhadap data tidak valid & Bypass):**
-   * **Kontrol:** Diimplementasikan Form Request Validation (`ProductRequest`). Validasi berjalan di sisi server (Backend) sehingga memblokir input manipulatif (seperti nama kurang dari 3 karakter, harga negatif, atau nama produk duplikat).
+- **Backend:** Laravel 11.x
+- **Frontend:** Vue 3 (Composition API)
+- **Routing:** Inertia.js (untuk Vue) & Ziggy (untuk *route helpers*)
+- **Styling:** Tailwind CSS 3
+- **Data Visualization:** Chart.js & vue-chartjs
+- **Bundler:** Vite
+- **Database:** SQLite / MySQL
 
-2. **Query (Rentan SQL Injection):**
-   * **Kontrol:** Aplikasi ini menggunakan **Eloquent ORM** Laravel. Di balik layar, Eloquent menggunakan *PDO Parameterized Queries* persis seperti spesifikasi `prepare()` dan `execute()` pada PHP native, sehingga SQL Injection mustahil dilakukan.
+## 🚀 Panduan Instalasi (Setup Guide)
 
-3. **Output (Rentan Cross-Site Scripting / XSS):**
-   * **Kontrol:** Output data dari database ke HTML menggunakan *Blade templating engine* dengan sintaks `{{ $product->name }}`. Sintaks ini secara otomatis menjalankan `htmlspecialchars` (escaping), sehingga input seperti `<b>Promo</b>` atau tag `<script>` akan dirender sebagai teks biasa dan aman.
+Ikuti langkah-langkah berikut untuk menjalankan proyek ini di mesin lokal Anda:
 
-4. **Alur Request (Rentan CSRF & Resubmission Data Ganda):**
-   * **Kontrol CSRF:** Setiap form aksi (Create, Update, Delete) dilindungi oleh perintah `@csrf` bawaan Laravel yang memverifikasi token pada setiap HTTP POST/PUT/DELETE. Tombol delete juga dibungkus dalam tag `<form>` alih-alih menggunakan link `<a>` biasa (GET) yang tidak aman.
-   * **Kontrol Anti-Duplikasi (PRG):** Menggunakan pola *Post/Redirect/Get*. Setelah proses `store` atau `update` berhasil, aplikasi menjalankan fungsi `redirect()->route('products.index')`. Hal ini mengubah *state* request di browser menjadi GET, sehingga jika pengguna me-refresh halaman (F5), browser tidak akan mengirimkan data ulang.
+### 1. Kloning Repositori
+```bash
+git clone https://github.com/username-anda/nama-repo-anda.git
+cd nama-repo-anda
+```
+
+### 2. Instalasi Dependensi
+Pastikan Anda telah menginstal PHP, Composer, dan Node.js.
+```bash
+# Install PHP Dependencies
+composer install
+
+# Install Frontend Dependencies (termasuk Chart.js)
+npm install
+```
+
+### 3. Konfigurasi Environment
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+*(Gunakan `DB_CONNECTION=sqlite` di file `.env` jika ingin setup yang lebih ringkas tanpa MySQL).*
+
+### 4. Migrasi & Seeding Database
+Jalankan perintah ini untuk membangun tabel (Users, Products, Orders, Complaints) dan mengisi data *dummy* eksklusif.
+```bash
+php artisan migrate:fresh --seed
+```
+*Gunakan akun bawaan dari seeder untuk mencoba fitur:*
+- **Admin**: `admin@example.com` | Password: `password123`
+- **Buyer/Staff**: `staff@example.com` | Password: `password123`
+
+### 5. Menjalankan Server Development
+Buka 2 tab terminal untuk menjalankan PHP Server dan Vite Bundler secara simultan:
+
+**Terminal 1:**
+```bash
+php artisan serve
+```
+
+**Terminal 2:**
+```bash
+npm run dev
+```
+
+Buka `http://127.0.0.1:8000` di *browser* Anda untuk menikmati etalase A'ritza!
+
+---
+
+## 📁 Dokumentasi Arsitektur Lengkap
+Untuk melihat pemodelan teknis proyek ini (Flowchart, ERD, dan struktur diagram MVC), silakan lihat dokumen Blueprint di folder `docs/`:
+- [Product Requirements Document (PRD)](./docs/PRD.md)
+- [System Architecture Document (SAD)](./docs/SAD.md)
+- [System Flowchart & User Journey](./docs/FLOWCHART.md)
+
+## 🎨 Konvensi Desain
+- **Maroon-900** (`#611624`): Warna utama/dominan untuk memberikan kesan mahal, elegan, dan tegas.
+- **Cream-50** (`#fdfbf7`): Latar belakang utama pengganti warna putih murni agar lebih ramah di mata (hangat).
+- **Gold** (`#c8a97e`): Warna aksen untuk sorotan penting (Status pemesanan, *hover* interaktif, dsb).
