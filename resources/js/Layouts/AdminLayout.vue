@@ -61,6 +61,11 @@ const handleSearch = () => {
                         </button>
                     </form>
 
+                    <!-- Cart Icon -->
+                    <Link :href="route('cart.index')" class="text-maroon-900 hover:text-gold transition-colors relative">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </Link>
+
                     <button @click="isDrawerOpen = true" class="flex items-center text-maroon-900 hover:text-gold transition-colors group">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
@@ -97,13 +102,13 @@ const handleSearch = () => {
                     <!-- Drawer Links -->
                     <ul class="space-y-6">
                         <li>
-                            <a href="#" class="block text-xs font-bold tracking-[0.2em] uppercase text-maroon-900 hover:text-gold transition-colors">Settings</a>
+                            <Link :href="route('settings')" class="block text-xs font-bold tracking-[0.2em] uppercase text-maroon-900 hover:text-gold transition-colors">Settings</Link>
                         </li>
                         <li>
-                            <a href="#" class="block text-xs font-bold tracking-[0.2em] uppercase text-maroon-900 hover:text-gold transition-colors">Help Center</a>
+                            <Link :href="route('help-center')" class="block text-xs font-bold tracking-[0.2em] uppercase text-maroon-900 hover:text-gold transition-colors">Help Center</Link>
                         </li>
                         <li>
-                            <a href="#" class="block text-xs font-bold tracking-[0.2em] uppercase text-maroon-900 hover:text-gold transition-colors">FAQ</a>
+                            <Link :href="route('faq')" class="block text-xs font-bold tracking-[0.2em] uppercase text-maroon-900 hover:text-gold transition-colors">FAQ</Link>
                         </li>
                         <li class="pt-6 border-t border-maroon-900/10">
                             <!-- If Logged In -->

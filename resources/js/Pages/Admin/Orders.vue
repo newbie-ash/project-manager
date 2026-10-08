@@ -1,9 +1,16 @@
 <script setup>
 import BackofficeLayout from '@/Layouts/BackofficeLayout.vue';
+import { Link, router } from '@inertiajs/vue3';
 
 defineProps({
     orders: Array
 });
+
+const updateStatus = (id, newStatus) => {
+    router.patch(route('orders.update', id), { status: newStatus }, {
+        preserveScroll: true
+    });
+};
 </script>
 
 <template>
@@ -41,7 +48,8 @@ defineProps({
                                       :class="{
                                           'text-gold border border-gold': order.status === 'Processing',
                                           'text-green-700 border border-green-700': order.status === 'Shipped' || order.status === 'Delivered',
-                                          'text-rose-700 border border-rose-700': order.status === 'Pending'
+                                          'text-maroon-900 border border-maroon-900': order.status === 'Unpaid',
+                                          'text-rose-700 border border-rose-700': order.status === 'Cancelled'
                                       }">
                                     {{ order.status }}
                                 </span>
@@ -50,18 +58,18 @@ defineProps({
                                 Rp {{ Number(order.total).toLocaleString('id-ID') }}
                             </td>
                             <td class="py-6 text-right">
-                                <!-- Action Buttons -->
-                                <div class="flex items-center justify-end gap-2">
-                                    <Link v-if="order.status === 'Processing'" :href="route('orders.update', order.database_id)" method="patch" :data="{status: 'Shipped'}" as="button" class="text-[10px] font-bold tracking-widest uppercase bg-maroon-900 text-white px-3 py-1 hover:bg-gold transition-colors">
-                                        Ship
-                                    </Link>
-                                    <Link v-else-if="order.status === 'Shipped'" :href="route('orders.update', order.database_id)" method="patch" :data="{status: 'Delivered'}" as="button" class="text-[10px] font-bold tracking-widest uppercase bg-gold text-white px-3 py-1 hover:bg-maroon-900 transition-colors">
-                                        Deliver
-                                    </Link>
-                                    <span v-else class="text-[10px] font-bold tracking-widest uppercase text-maroon-900/30">
-                                        Completed
-                                    </span>
-                                </div>
+                                <!-- Status Dropdown -->
+                                <select 
+                                    :value="order.status" 
+                                    @change="updateStatus(order.database_id, $event.target.value)"
+                                    class="text-[10px] font-bold tracking-widest uppercase bg-transparent border border-maroon-900/20 text-maroon-900 py-1.5 px-2 rounded focus:outline-none focus:border-maroon-900 cursor-pointer"
+                                >
+                                    <option value="Unpaid">Unpaid</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
                             </td>
                         </tr>
                     </tbody>

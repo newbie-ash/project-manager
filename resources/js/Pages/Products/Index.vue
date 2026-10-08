@@ -45,15 +45,15 @@ defineProps({
                             <span class="font-serif text-4xl text-maroon-900/20 italic">{{ product.name.charAt(0) }}</span>
                         </template>
 
-                        <!-- Pre-Order Overlay for Buyers and Guests (Appear on Hover) -->
+                        <!-- Add to Cart Overlay for Buyers and Guests (Appear on Hover) -->
                         <div v-if="!$page.props.auth.user || $page.props.auth.user.role !== 'admin'" class="absolute inset-0 bg-white/50 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <!-- Jika Logged in -> POST ke orders -->
-                            <Link v-if="$page.props.auth.user" :href="route('orders.store')" method="post" :data="{ product_id: product.id }" as="button" class="bg-maroon-900 text-white text-[10px] font-bold tracking-widest uppercase px-6 py-3 hover:bg-gold transition-colors shadow-xl">
-                                Pre-Order
+                            <!-- Jika Logged in -> POST ke cart -->
+                            <Link v-if="$page.props.auth.user" :href="route('cart.store')" method="post" :data="{ product_id: product.id, quantity: 1 }" as="button" class="bg-maroon-900 text-white text-[10px] font-bold tracking-widest uppercase px-6 py-3 hover:bg-gold transition-colors shadow-xl">
+                                Add to Cart
                             </Link>
                             <!-- Jika Guest -> Redirect ke Login -->
                             <Link v-else :href="route('login')" class="bg-maroon-900 text-white text-[10px] font-bold tracking-widest uppercase px-6 py-3 hover:bg-gold transition-colors shadow-xl inline-block">
-                                Pre-Order
+                                Sign in to Buy
                             </Link>
                         </div>
                     </div>

@@ -41,9 +41,9 @@ defineProps({
                         </td>
                         <td class="py-4 px-6 text-xs text-maroon-900/70 uppercase tracking-widest">{{ product.category || 'N/A' }}</td>
                         <td class="py-4 px-6 text-sm font-serif text-maroon-900 text-right">Rp {{ Number(product.price).toLocaleString('id-ID') }}</td>
-                        <td class="py-4 px-6 text-right space-x-3">
-                            <Link :href="route('products.edit', product.id)" class="text-[10px] font-bold tracking-widest uppercase text-maroon-900 hover:text-gold transition-colors inline-block">Edit</Link>
-                            <Link :href="route('products.destroy', product.id)" method="delete" as="button" class="text-[10px] font-bold tracking-widest uppercase text-rose-500 hover:text-rose-700 transition-colors inline-block">Delete</Link>
+                        <td class="py-4 px-6 text-right space-x-2 flex justify-end">
+                            <Link :href="route('products.edit', product.id)" class="px-3 py-2 bg-maroon-900/10 hover:bg-maroon-900 text-maroon-900 hover:text-white rounded-md text-[9px] font-bold tracking-widest uppercase transition-colors inline-flex items-center shadow-sm">Edit</Link>
+                            <Link :href="route('products.destroy', product.id)" method="delete" as="button" class="px-3 py-2 bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white rounded-md text-[9px] font-bold tracking-widest uppercase transition-colors inline-flex items-center shadow-sm">Delete</Link>
                         </td>
                     </tr>
                 </tbody>

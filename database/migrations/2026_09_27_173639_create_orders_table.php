@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('order_number')->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('status')->default('Pending');
+            $table->text('shipping_address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('status')->default('Unpaid'); // Unpaid, Paid, Shipped, Delivered, Canceled
             $table->decimal('total_price', 15, 2);
+            $table->string('snap_token')->nullable(); // For Midtrans Snap
             $table->timestamps();
         });
     }

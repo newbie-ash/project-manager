@@ -13,7 +13,7 @@ class OrderController extends Controller
     public function index()
     {
         // Admin: Show all orders
-        $orders = Order::with(['user', 'product'])->latest()->get()->map(function($order) {
+        $orders = Order::with(['user', 'items.product'])->latest()->get()->map(function($order) {
             return [
                 'database_id' => $order->id, // Real database ID needed for updating
                 'id' => $order->order_number,
@@ -32,13 +32,20 @@ class OrderController extends Controller
     public function myPurchases()
     {
         // Buyer: Show only their own orders
-        $purchases = Order::with(['product'])->where('user_id', auth()->id())->latest()->get()->map(function($order) {
+        $purchases = Order::with(['items.product'])->where('user_id', auth()->id())->latest()->get()->map(function($order) {
+            
+            $itemNames = $order->items->map(function($item) {
+                return $item->product ? $item->product->name . ' (x' . $item->quantity . ')' : 'Deleted Product';
+            })->implode(', ');
+
             return [
+                'database_id' => $order->id,
                 'id' => $order->order_number,
                 'date' => $order->created_at->format('Y-m-d'),
                 'status' => $order->status,
-                'items' => $order->product ? $order->product->name : 'Deleted Product',
-                'total' => $order->total_price
+                'items' => $itemNames ?: 'No items',
+                'total' => $order->total_price,
+                'snap_token' => $order->snap_token
             ];
         });
 
@@ -69,7 +76,7 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $request->validate([
-            'status' => 'required|in:Pending,Processing,Shipped,Delivered,Cancelled'
+            'status' => 'required|in:Pending,Unpaid,Processing,Shipped,Delivered,Cancelled'
         ]);
 
         $order->update(['status' => $request->status]);
