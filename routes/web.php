@@ -13,20 +13,28 @@ Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('w
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 
 // Static Pages
-Route::get('/settings', function () { return \Inertia\Inertia::render('Settings'); })->name('settings');
 Route::get('/help-center', function () { return \Inertia\Inertia::render('HelpCenter'); })->name('help-center');
 Route::get('/faq', function () { return \Inertia\Inertia::render('FAQ'); })->name('faq');
 
 Route::middleware(['auth'])->group(function () {
-    // HANYA admin yang bisa menambah, mengubah, dan menghapus produk
+    // Pengaturan Akun (Bisa diakses user, staff, admin)
+    Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
+    Route::post('/settings/profile', [\App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile.update');
+
+    // HANYA admin yang bisa menambah, dan menghapus produk secara permanen, serta melihat dashboard admin utama
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('products', ProductController::class)->only(['create', 'store', 'destroy']);
+    });
+
+    // Admin & Staff bisa mengakses Katalog Koleksi (Backoffice), Edit Produk (Update Stok), Pesanan, dan Komplain
+    Route::middleware(['role:staff,admin'])->group(function () {
         Route::get('/admin/products', [\App\Http\Controllers\DashboardController::class, 'products'])->name('admin.products.index');
+        Route::resource('products', ProductController::class)->only(['edit', 'update']);
         Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
         Route::patch('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'update'])->name('orders.update');
         Route::get('/complaints', [\App\Http\Controllers\ComplaintController::class, 'index'])->name('complaints.index');
         Route::patch('/complaints/{complaint}', [\App\Http\Controllers\ComplaintController::class, 'update'])->name('complaints.update');
-        Route::resource('products', ProductController::class)->except(['index', 'show']);
     });
 
     // Rute Keranjang Belanja & Checkout
@@ -44,4 +52,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Rute untuk pembeli / user biasa melihat pesanannya sendiri
     Route::get('/my-purchases', [\App\Http\Controllers\OrderController::class, 'myPurchases'])->name('purchases.index');
+});
+
+// ==============================
+// Staff‑only routes (admin can also access)
+// ==============================
+Route::middleware(['auth', 'role:staff,admin'])->group(function () {
+    Route::get('/staff/dashboard', [\App\Http\Controllers\StaffController::class, 'dashboard'])->name('staff.dashboard');
+    Route::get('/staff/reports', [\App\Http\Controllers\StaffController::class, 'reports'])->name('staff.reports');
+    Route::get('/staff/sales-stats', [\App\Http\Controllers\StaffController::class, 'salesStats'])->name('staff.sales_stats');
+    Route::get('/staff/stock-management', [\App\Http\Controllers\StaffController::class, 'stockManagement'])->name('staff.stock_management');
 });

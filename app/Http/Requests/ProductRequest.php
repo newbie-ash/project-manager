@@ -25,13 +25,17 @@ class ProductRequest extends FormRequest
         $productId = $this->route('product') ? $this->route('product')->id : null;
 
         return [
-            'name' => [
+            'sku' => [
                 'required',
-                'min:4', // Tidak boleh terdiri dari 3 huruf (minimal 4)
                 Rule::unique('products')->ignore($productId),
             ],
-            'category' => 'required',
-            'price' => 'required|numeric|gt:0', // Tidak boleh 0 atau di bawahnya
+            'name' => [
+                'required',
+                'min:4',
+                Rule::unique('products')->ignore($productId),
+            ],
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|gt:0',
             'stock' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];

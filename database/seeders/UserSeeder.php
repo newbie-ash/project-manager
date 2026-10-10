@@ -21,5 +21,11 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password123'),
             'role' => 'staff'
         ]);
+
+        User::updateOrCreate(['email' => 'buyer@example.com'], [
+            'name' => 'Buyer',
+            'password' => Hash::make('password123'),
+            'role' => 'buyer'
+        ]);
     }
 }

@@ -38,8 +38,13 @@ const handleSearch = () => {
                         Orders
                     </Link>
 
+                    <!-- Staff Only Links -->
+                    <Link v-if="$page.props.auth.user?.role === 'staff'" :href="route('staff.dashboard')" class="text-[11px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': $page.url.startsWith('/staff'), 'text-maroon-900/50 hover:text-maroon-900': !$page.url.startsWith('/staff')}">
+                        Staff Panel
+                    </Link>
+
                     <!-- Buyer Only Links -->
-                    <Link v-if="$page.props.auth.user?.role !== 'admin'" :href="route('purchases.index')" class="text-[11px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': $page.url.startsWith('/my-purchases'), 'text-maroon-900/50 hover:text-maroon-900': !$page.url.startsWith('/my-purchases')}">
+                    <Link v-if="$page.props.auth.user?.role !== 'admin' && $page.props.auth.user?.role !== 'staff'" :href="route('purchases.index')" class="text-[11px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': $page.url.startsWith('/my-purchases'), 'text-maroon-900/50 hover:text-maroon-900': !$page.url.startsWith('/my-purchases')}">
                         My Purchases
                     </Link>
                 </nav>
@@ -90,8 +95,9 @@ const handleSearch = () => {
                 <div class="p-8 flex-1 overflow-y-auto">
                     <!-- Profile Snippet -->
                     <div class="mb-10 text-center">
-                        <div class="w-16 h-16 rounded-full bg-maroon-900 text-gold flex items-center justify-center font-serif text-2xl italic mx-auto mb-3 shadow-inner">
-                            {{ $page.props.auth.user ? $page.props.auth.user.name.charAt(0).toUpperCase() : 'G' }}
+                        <div class="w-16 h-16 rounded-full bg-maroon-900 text-gold flex items-center justify-center font-serif text-2xl mx-auto mb-3 shadow-inner overflow-hidden border border-maroon-900/20">
+                            <img v-if="$page.props.auth.user?.avatar" :src="'/storage/' + $page.props.auth.user.avatar" class="w-full h-full object-cover" />
+                            <span v-else class="italic">{{ $page.props.auth.user ? $page.props.auth.user.name.charAt(0).toUpperCase() : 'G' }}</span>
                         </div>
                         <h3 class="text-sm font-bold text-maroon-900">{{ $page.props.auth.user ? $page.props.auth.user.name : 'Guest' }}</h3>
                         <p class="text-[9px] tracking-widest uppercase text-maroon-900/50 mt-1">
@@ -101,6 +107,10 @@ const handleSearch = () => {
 
                     <!-- Drawer Links -->
                     <ul class="space-y-6">
+                        <!-- Staff Panel Link -->
+                        <li v-if="$page.props.auth.user?.role === 'staff'">
+                            <Link :href="route('staff.dashboard')" class="block text-xs font-bold tracking-[0.2em] uppercase text-gold hover:text-maroon-900 transition-colors">Staff Dashboard</Link>
+                        </li>
                         <li>
                             <Link :href="route('settings')" class="block text-xs font-bold tracking-[0.2em] uppercase text-maroon-900 hover:text-gold transition-colors">Settings</Link>
                         </li>
@@ -126,7 +136,26 @@ const handleSearch = () => {
         </div>
 
         <!-- Main Content -->
-        <main class="w-full">
+        <main class="w-full relative">
+            <!-- Global Flash Messages -->
+            <div v-if="$page.props.flash.success || $page.props.flash.error" class="fixed top-24 right-8 z-50 flex flex-col gap-4 w-96 max-w-[calc(100vw-2rem)] pointer-events-none">
+                <!-- Success Alert -->
+                <div v-if="$page.props.flash.success" class="pointer-events-auto bg-green-50 border-l-4 border-green-700 p-4 shadow-xl flex items-start justify-between">
+                    <div class="flex">
+                        <svg class="w-5 h-5 text-green-700 mr-3 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="text-sm font-medium text-green-900 leading-snug">{{ $page.props.flash.success }}</p>
+                    </div>
+                </div>
+                
+                <!-- Error Alert -->
+                <div v-if="$page.props.flash.error" class="pointer-events-auto bg-red-50 border-l-4 border-red-700 p-4 shadow-xl flex items-start justify-between">
+                    <div class="flex">
+                        <svg class="w-5 h-5 text-red-700 mr-3 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="text-sm font-medium text-red-900 leading-snug">{{ $page.props.flash.error }}</p>
+                    </div>
+                </div>
+            </div>
+            
             <slot />
         </main>
     </div>

@@ -76,6 +76,13 @@ defineProps({
                 <h3 class="text-xl font-bold tracking-[0.2em] uppercase text-maroon-900 mb-4">No Pieces Found</h3>
                 <p class="text-sm font-serif italic text-maroon-900/50">The collection is currently empty.</p>
             </div>
+            <!-- Pagination -->
+            <div v-if="products.links && products.links.length > 3" class="mt-16 flex justify-center items-center gap-2">
+                <template v-for="(link, p) in products.links" :key="p">
+                    <div v-if="link.url === null" class="px-4 py-2 text-sm text-maroon-900/30 border border-transparent font-serif italic" v-html="link.label"></div>
+                    <Link v-else :href="link.url" class="px-4 py-2 text-sm transition-colors border font-serif" :class="{ 'bg-maroon-900 text-gold border-maroon-900 font-bold': link.active, 'text-maroon-900 border-cream-200 hover:border-gold hover:text-gold': !link.active }" v-html="link.label"></Link>
+                </template>
+            </div>
             
         </div>
     </AdminLayout>

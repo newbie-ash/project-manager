@@ -3,9 +3,14 @@ import BackofficeLayout from '@/Layouts/BackofficeLayout.vue';
 import { useForm, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
+const props = defineProps({
+    categories: Array
+});
+
 const form = useForm({
+    sku: '',
     name: '',
-    category: '',
+    category_id: '',
     price: '',
     stock: 0,
     image: null,
@@ -76,18 +81,30 @@ const submitForm = () => {
                             <p v-if="form.errors.image" class="text-rose-600 text-xs font-medium mt-2">{{ form.errors.image }}</p>
                         </div>
 
-                        <!-- Name -->
-                        <div>
-                            <label for="name" class="block text-[10px] font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Item Name</label>
-                            <input v-model="form.name" type="text" id="name" class="block w-full px-4 py-3 border bg-white text-sm font-sans text-maroon-900 focus:outline-none transition-all" :class="{'border-rose-500': form.errors.name, 'border-maroon-900/20 focus:border-gold focus:ring-1 focus:ring-gold': !form.errors.name}" placeholder="e.g. Classic Signature Tote">
-                            <p v-if="form.errors.name" class="text-rose-600 text-xs font-medium mt-2">{{ form.errors.name }}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                            <!-- Name -->
+                            <div>
+                                <label for="name" class="block text-[10px] font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Item Name</label>
+                                <input v-model="form.name" type="text" id="name" class="block w-full px-4 py-3 border bg-white text-sm font-sans text-maroon-900 focus:outline-none transition-all" :class="{'border-rose-500': form.errors.name, 'border-maroon-900/20 focus:border-gold focus:ring-1 focus:ring-gold': !form.errors.name}" placeholder="e.g. Classic Signature Tote">
+                                <p v-if="form.errors.name" class="text-rose-600 text-xs font-medium mt-2">{{ form.errors.name }}</p>
+                            </div>
+
+                            <!-- SKU -->
+                            <div>
+                                <label for="sku" class="block text-[10px] font-bold text-maroon-900/60 uppercase tracking-widest mb-2">SKU Code</label>
+                                <input v-model="form.sku" type="text" id="sku" class="block w-full px-4 py-3 border bg-white text-sm font-sans text-maroon-900 focus:outline-none transition-all" :class="{'border-rose-500': form.errors.sku, 'border-maroon-900/20 focus:border-gold focus:ring-1 focus:ring-gold': !form.errors.sku}" placeholder="e.g. ARTZ-0001">
+                                <p v-if="form.errors.sku" class="text-rose-600 text-xs font-medium mt-2">{{ form.errors.sku }}</p>
+                            </div>
                         </div>
 
                         <!-- Category -->
                         <div>
-                            <label for="category" class="block text-[10px] font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Category</label>
-                            <input v-model="form.category" type="text" id="category" class="block w-full px-4 py-3 border bg-white text-sm font-sans text-maroon-900 focus:outline-none transition-all" :class="{'border-rose-500': form.errors.category, 'border-maroon-900/20 focus:border-gold focus:ring-1 focus:ring-gold': !form.errors.category}" placeholder="e.g. Handbags">
-                            <p v-if="form.errors.category" class="text-rose-600 text-xs font-medium mt-2">{{ form.errors.category }}</p>
+                            <label for="category_id" class="block text-[10px] font-bold text-maroon-900/60 uppercase tracking-widest mb-2">Category</label>
+                            <select v-model="form.category_id" id="category_id" class="block w-full px-4 py-3 border bg-white text-sm font-sans text-maroon-900 focus:outline-none transition-all" :class="{'border-rose-500': form.errors.category_id, 'border-maroon-900/20 focus:border-gold focus:ring-1 focus:ring-gold': !form.errors.category_id}">
+                                <option value="" disabled>Select a Category...</option>
+                                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+                            </select>
+                            <p v-if="form.errors.category_id" class="text-rose-600 text-xs font-medium mt-2">{{ form.errors.category_id }}</p>
                         </div>
 
                         <!-- Price & Stock Grid -->

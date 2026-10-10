@@ -2,17 +2,30 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Supplier;
+use App\Models\User;
+use App\Models\StockMovement;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $products = [
+        // 1. Buat beberapa Supplier menggunakan Factory
+        $suppliers = Supplier::factory(3)->create();
+
+        // 2. Buat Kategori Manual agar namanya sesuai dengan web A'ritza
+        $categoriesData = ['Handbags', 'Accessories', 'Footwear', 'Fine Jewelry'];
+        $categories = [];
+        foreach ($categoriesData as $catName) {
+            $categories[$catName] = Category::create(['name' => $catName]);
+        }
+
+        // 3. Data Produk A'ritza
+        $productsData = [
             [
                 'name' => 'A\'ritza Signature Tote',
                 'category' => 'Handbags',
@@ -75,8 +88,48 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        foreach ($products as $product) {
-            Product::create($product);
+        // Dapatkan Admin untuk histori stok
+        $admin = User::where('role', 'admin')->first() ?? User::factory()->create(['role' => 'admin']);
+
+        foreach ($productsData as $index => $data) {
+            $catName = $data['category'];
+            unset($data['category']);
+            
+            $data['category_id'] = $categories[$catName]->id;
+            $data['sku'] = 'ARTZ-' . str_pad($index + 1, 4, '0', STR_PAD_LEFT);
+            
+            $product = Product::create($data);
+
+            // Hubungkan dengan Supplier secara acak
+            $product->suppliers()->attach(
+                $suppliers->random(rand(1, 2))->pluck('id')->toArray(),
+                ['supplier_price' => $data['price'] * 0.6] // Asumsi harga modal 60%
+            );
+
+            // Buat Histori Barang Masuk Awal
+            StockMovement::create([
+                'product_id' => $product->id,
+                'user_id' => $admin->id,
+                'type' => 'IN',
+                'quantity' => $data['stock'],
+                'notes' => 'Initial stock seed'
+            ]);
         }
+        
+        // Buat tambahan 15 Produk dari Factory secara acak
+        Product::factory(15)->create()->each(function ($product) use ($suppliers, $admin) {
+            $product->suppliers()->attach(
+                $suppliers->random(rand(1, 2))->pluck('id')->toArray(),
+                ['supplier_price' => $product->price * 0.6]
+            );
+
+            StockMovement::create([
+                'product_id' => $product->id,
+                'user_id' => $admin->id,
+                'type' => 'IN',
+                'quantity' => $product->stock,
+                'notes' => 'Random factory stock'
+            ]);
+        });
     }
 }

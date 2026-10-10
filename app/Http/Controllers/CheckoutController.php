@@ -7,8 +7,8 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Str;
-// use Midtrans\Config;
-// use Midtrans\Snap;
+use Illuminate\Support\Facades\DB;
+use App\Models\StockMovement;
 
 class CheckoutController extends Controller
 {
@@ -31,34 +31,64 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', 'Tidak ada barang yang dipilih.');
         }
 
-        $totalPrice = $cartItems->sum(function($item) {
-            return $item->product->price * $item->quantity;
-        });
+        DB::beginTransaction();
 
-        // Buat Pesanan (Order)
-        $order = Order::create([
-            'order_number' => 'ORD-' . strtoupper(Str::random(8)),
-            'user_id' => $userId,
-            'shipping_address' => $request->shipping_address,
-            'phone' => $request->phone,
-            'status' => 'Unpaid',
-            'total_price' => $totalPrice
-        ]);
+        try {
+            // Validasi apakah stok mencukupi
+            foreach ($cartItems as $item) {
+                if ($item->quantity > $item->product->stock) {
+                    throw new \Exception("Stok tidak mencukupi untuk item: " . $item->product->name);
+                }
+            }
 
-        // Pindahkan dari Cart ke OrderItem
-        foreach ($cartItems as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item->product_id,
-                'quantity' => $item->quantity,
-                'price' => $item->product->price
+            $totalPrice = $cartItems->sum(function($item) {
+                return $item->product->price * $item->quantity;
+            });
+
+            // Buat Pesanan (Order)
+            $order = Order::create([
+                'order_number' => 'ORD-' . strtoupper(Str::random(8)),
+                'user_id' => $userId,
+                'shipping_address' => $request->shipping_address,
+                'phone' => $request->phone,
+                'status' => 'Unpaid',
+                'total_price' => $totalPrice
             ]);
-        }
 
-        // Hapus HANYA isi keranjang yang telah di-checkout
-        Cart::where('user_id', $userId)
-            ->whereIn('id', $request->selected_items)
-            ->delete();
+            // Pindahkan dari Cart ke OrderItem, Kurangi Stok, Catat Histori
+            foreach ($cartItems as $item) {
+                // 1. Kurangi Stok
+                $item->product->decrement('stock', $item->quantity);
+
+                // 2. Buat Order Item
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'quantity' => $item->quantity,
+                    'price' => $item->product->price
+                ]);
+
+                // 3. Catat Histori Barang Keluar
+                StockMovement::create([
+                    'product_id' => $item->product_id,
+                    'user_id' => $userId,
+                    'type' => 'OUT',
+                    'quantity' => $item->quantity,
+                    'notes' => 'Checkout Order: ' . $order->order_number
+                ]);
+            }
+
+            // Hapus HANYA isi keranjang yang telah di-checkout
+            Cart::where('user_id', $userId)
+                ->whereIn('id', $request->selected_items)
+                ->delete();
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('cart.index')->with('error', $e->getMessage());
+        }
 
         // ----------------------------------------------------
         // INTEGRASI MIDTRANS SNAP
