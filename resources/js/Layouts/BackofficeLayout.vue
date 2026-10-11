@@ -29,58 +29,29 @@ const page = usePage();
             <!-- Navigation Links -->
             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
                 <!-- Admin Links -->
-                <template v-if="$page.props.auth.user?.role === 'admin'">
-                    <Link :href="route('dashboard')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url === '/dashboard', 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': $page.url !== '/dashboard'}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                        Dashboard
-                    </Link>
+                <Link :href="route('dashboard')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url === '/dashboard', 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': $page.url !== '/dashboard'}">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    Dashboard
+                </Link>
 
-                </template>
-                <!-- Staff Dashboard -->
-                <template v-if="$page.props.auth.user?.role === 'staff'">
-                    <Link :href="route('staff.dashboard')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url === '/staff/dashboard', 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': $page.url !== '/staff/dashboard'}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                        Dashboard
-                    </Link>
-                </template>
+                <p class="px-4 pt-4 pb-2 text-[8px] font-bold tracking-[0.2em] text-maroon-900/40 uppercase">Inventory</p>
+                <Link :href="route('admin.products.index')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url.startsWith('/admin/products') || $page.url.includes('/products/create') || $page.url.includes('/edit'), 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': !($page.url.startsWith('/admin/products') || $page.url.includes('/products/create') || $page.url.includes('/edit'))}">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Manage Products
+                </Link>
+            
+                <p class="px-4 pt-4 pb-2 text-[8px] font-bold tracking-[0.2em] text-maroon-900/40 uppercase">Transactions</p>
+                <Link :href="route('orders.index')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url.startsWith('/orders'), 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': !$page.url.startsWith('/orders')}">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    Client Orders
+                </Link>
 
-                <!-- Admin & Staff Shared Links -->
-                <template v-if="['admin', 'staff'].includes($page.props.auth.user?.role)">
-                    <p class="px-4 pt-4 pb-2 text-[8px] font-bold tracking-[0.2em] text-maroon-900/40 uppercase">Inventory</p>
-                    <Link :href="route('admin.products.index')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url.startsWith('/admin/products') || $page.url.includes('/products/create') || $page.url.includes('/edit'), 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': !($page.url.startsWith('/admin/products') || $page.url.includes('/products/create') || $page.url.includes('/edit'))}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                        Manage Products
-                    </Link>
-                
-                    <p class="px-4 pt-4 pb-2 text-[8px] font-bold tracking-[0.2em] text-maroon-900/40 uppercase">Transactions</p>
-                    <Link :href="route('orders.index')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url.startsWith('/orders'), 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': !$page.url.startsWith('/orders')}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                        Client Orders
-                    </Link>
-
-                    <p class="px-4 pt-4 pb-2 text-[8px] font-bold tracking-[0.2em] text-maroon-900/40 uppercase">Support</p>
-                    <Link :href="route('complaints.index')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url.startsWith('/complaints'), 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': !$page.url.startsWith('/complaints')}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                        Complaints
-                    </Link>
-                </template>
-                <!-- Staff Only (Read Only Old Menus) -->
-                <template v-if="$page.props.auth.user?.role === 'staff'">
-                    <p class="px-4 pt-4 pb-2 text-[8px] font-bold tracking-[0.2em] text-maroon-900/40 uppercase">Reports</p>
-                    <Link :href="route('staff.reports')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url === '/staff/reports', 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': $page.url !== '/staff/reports'}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        Staff Reports
-                    </Link>
-                    <Link :href="route('staff.sales_stats')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url === '/staff/sales-stats', 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': $page.url !== '/staff/sales-stats'}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                        Sales Stats
-                    </Link>
-                    <Link :href="route('staff.stock_management')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url === '/staff/stock-management', 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': $page.url !== '/staff/stock-management'}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                        Stock List
-                    </Link>
-                </template>
-                </nav>
+                <p class="px-4 pt-4 pb-2 text-[8px] font-bold tracking-[0.2em] text-maroon-900/40 uppercase">Support</p>
+                <Link :href="route('complaints.index')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-lg" :class="{'bg-maroon-900 text-gold shadow-md': $page.url.startsWith('/complaints'), 'text-maroon-900/60 hover:bg-white hover:text-maroon-900': !$page.url.startsWith('/complaints')}">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                    Complaints
+                </Link>
+            </nav>
 
             <div class="p-4 border-t border-maroon-900/10 flex flex-col gap-2">
                 <Link :href="route('settings')" class="flex items-center gap-3 px-4 py-3 text-[10px] font-bold tracking-widest uppercase text-maroon-900 hover:bg-cream-100 transition-colors rounded-lg">

@@ -9,9 +9,9 @@ const page = usePage();
 const user = page.props.auth.user;
 
 // Pilih layout berdasarkan role agar nyambung dengan tampilan mereka
-// Admin dan Staff menggunakan BackofficeLayout, buyer menggunakan LuxuryLayout
+// Admin menggunakan BackofficeLayout, buyer menggunakan LuxuryLayout
 const resolveLayout = () => {
-    if (user?.role === 'admin' || user?.role === 'staff') {
+    if (user?.role === 'admin') {
         return BackofficeLayout;
     }
     return LuxuryLayout;

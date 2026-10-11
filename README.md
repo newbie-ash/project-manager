@@ -63,7 +63,7 @@ php artisan migrate:fresh --seed
 ```
 *Gunakan akun bawaan dari seeder untuk mencoba fitur:*
 - **Admin**: `admin@example.com` | Password: `password123`
-- **Buyer/Staff**: `staff@example.com` | Password: `password123`
+- **Buyer**: `buyer@example.com` | Password: `password123`
 
 ### 5. Menjalankan Server Development
 Buka 2 tab terminal untuk menjalankan PHP Server dan Vite Bundler secara simultan:

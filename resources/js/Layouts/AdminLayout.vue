@@ -38,13 +38,8 @@ const handleSearch = () => {
                         Orders
                     </Link>
 
-                    <!-- Staff Only Links -->
-                    <Link v-if="$page.props.auth.user?.role === 'staff'" :href="route('staff.dashboard')" class="text-[11px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': $page.url.startsWith('/staff'), 'text-maroon-900/50 hover:text-maroon-900': !$page.url.startsWith('/staff')}">
-                        Staff Panel
-                    </Link>
-
                     <!-- Buyer Only Links -->
-                    <Link v-if="$page.props.auth.user?.role !== 'admin' && $page.props.auth.user?.role !== 'staff'" :href="route('purchases.index')" class="text-[11px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': $page.url.startsWith('/my-purchases'), 'text-maroon-900/50 hover:text-maroon-900': !$page.url.startsWith('/my-purchases')}">
+                    <Link v-if="$page.props.auth.user?.role !== 'admin'" :href="route('purchases.index')" class="text-[11px] font-bold tracking-widest uppercase transition-all" :class="{'text-maroon-900 border-b border-maroon-900 pb-1': $page.url.startsWith('/my-purchases'), 'text-maroon-900/50 hover:text-maroon-900': !$page.url.startsWith('/my-purchases')}">
                         My Purchases
                     </Link>
                 </nav>
@@ -107,10 +102,6 @@ const handleSearch = () => {
 
                     <!-- Drawer Links -->
                     <ul class="space-y-6">
-                        <!-- Staff Panel Link -->
-                        <li v-if="$page.props.auth.user?.role === 'staff'">
-                            <Link :href="route('staff.dashboard')" class="block text-xs font-bold tracking-[0.2em] uppercase text-gold hover:text-maroon-900 transition-colors">Staff Dashboard</Link>
-                        </li>
                         <li>
                             <Link :href="route('settings')" class="block text-xs font-bold tracking-[0.2em] uppercase text-maroon-900 hover:text-gold transition-colors">Settings</Link>
                         </li>
