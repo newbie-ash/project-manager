@@ -35,8 +35,8 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek ini di mesin lokal Anda:
 
 ### 1. Kloning Repositori
 ```bash
-git clone https://github.com/username-anda/nama-repo-anda.git
-cd nama-repo-anda
+git clone https://github.com/newbie-ash/project-manager.git
+cd project-manager
 ```
 
 ### 2. Instalasi Dependensi
